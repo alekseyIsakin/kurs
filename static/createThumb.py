@@ -1,11 +1,9 @@
 from PIL import Image
-from os import listdir, rename
+from os import listdir, rename,getcwd
 from os.path import isfile, join
 
-PATH = r"E:\repos\web\kurs\static\images"
-MAX_SIZE = (200, 200)
-
-
+PATH = join(getcwd(), "images")
+MAX_SIZE = (192, 192)
 
 onlyfiles = [f for f in listdir(PATH) if isfile(join(PATH, f))]
 
