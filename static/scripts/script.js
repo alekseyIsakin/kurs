@@ -4,9 +4,9 @@ localStorage.clear()
 
 const change_page = (change = +16) => {
   const pair = new URLSearchParams();
-  pair.append("from", cur_page);
+  pair.append("from", 0);
   cur_page = Math.max(16, cur_page + change)
-  pair.append("to", cur_page);
+  pair.append("to", change);
 
   const xmlHttp = new XMLHttpRequest();
   xmlHttp.open("GET", '/thumbs?' + pair, true); // true for synchronous request
@@ -23,11 +23,12 @@ const change_page = (change = +16) => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  change_page(+3)
+  const img_holder_bound = document.querySelector('.image-holder').getBoundingClientRect()
+  let cnt = Math.floor(img_holder_bound.width / 200)
+  cnt *= Math.ceil(img_holder_bound.height / 200)
+  console.log('>>', cnt)
+  change_page(cnt)
 })
-const image_click = (ev) => {
-
-}
 
 
 
@@ -67,11 +68,11 @@ document.querySelector('.image-holder').addEventListener('scroll', () => {
   const scrollPos = img_holder.getBoundingClientRect().bottom
   const scrollHeight = img_holder.lastChild.getBoundingClientRect().bottom
 
-  console.log(img_holder.getBoundingClientRect().bottom,)
-
   // если пользователь прокрутил достаточно далеко (< 100px до конца)
   if (scrollHeight < scrollPos + 100) {
-    change_page(+3)
+    let cnt = Math.floor(img_holder.getBoundingClientRect().width / 200)
+    console.log(cnt)
+    change_page(cnt)
   }
 })
 
@@ -81,29 +82,39 @@ const create_image_list = (thumb_array = []) => {
 
     const div = document.createElement('div')
     div.classList.add('image')
+    div.classList.add('background')
     div.style = `background-image: url('/../images/thumbnails/${thumb_array[i]}')`
     div.setAttribute('value', thumb_array[i])
 
 
     div.addEventListener('click', (ev) => {
-      const menu = document.querySelector('.menu')
 
-      if (localStorage['selected_img'] == thumb_array[i]) {
-        if (menu.classList.contains('show'))
-          menu.classList.remove('show')
-        else
-          menu.classList.add('show')
-      }
-      else {
-        menu.classList.add('show')
-      }
-
-      console.log(ev.clientX)
-      menu.style.left = `${ev.clientX}px`
-      menu.style.top = `${ev.clientY + 5}px`
+      const viewer = document.querySelector('.image-viewer')
+      const orig_image = document.querySelector('#orig-image')
+      viewer.classList.add('show')
 
       const cur = document.querySelector(`[value="${thumb_array[i]}"]`)
-      cur.classList.add('selected')
+      if (cur.classList.contains('selected')) {
+        cur.classList.remove('selected')
+        viewer.classList.remove('show')
+      } else {
+        cur.classList.add('selected')
+        viewer.classList.add('show')
+        orig_image.style.content = `url('/../images/${thumb_array[i]}')`
+
+        const fac = new FastAverageColor();
+        const container = document.querySelector('.image-viewer');
+
+        fac.getColorAsync(`http://localhost:3000/images/${thumb_array[i]}`)
+          .then(color => {
+            // container.style.backgroundColor = color.rgba;
+            container.style.background = `linear-gradient(90deg, white 0%, ${color.rgba} 20%, ${color.rgba} 80%, white 100%)`
+            // container.style.color = color.isDark ? '#fff' : '#000';
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      }
 
       if (localStorage['selected_img']) {
         const prev = document.querySelector(`[value="${localStorage['selected_img']}"]`)
@@ -122,3 +133,15 @@ const create_image_list = (thumb_array = []) => {
     image_holder.appendChild(div)
   }
 }
+
+document.querySelector('#orig-image').addEventListener('click', () => {
+  const viewer = document.querySelector('.image-viewer')
+  const orig_image = document.querySelector('#orig-image')
+
+  orig_image.classList.toggle('orig-image-h')
+  // if (orig_image.classList.contains('orig-image-h') == false) {
+  //   viewer.style["justify-content"]  = 'start';
+  // }else{
+  //   viewer.style["justify-content"]  = 'center';
+  // }
+})

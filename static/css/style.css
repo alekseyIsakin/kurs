@@ -1,12 +1,24 @@
+@font-face {
+
+  font-family: 'Minotaur-Jugendstil';
+  src: url('/fonts/Minotaur-Jugendstil.ttf');
+  font-display: swap;
+}
+
 body,
 html {
   height: 100%;
   margin: 0px;
+  font-family: 'Minotaur-Jugendstil';
 }
 
 body {
   display: flex;
   justify-content: space-between;
+}
+
+h1 {
+  margin: 0px;
 }
 
 .row {
@@ -20,11 +32,11 @@ body {
 
 .head {
   background-color: rgb(93, 61, 209);
+  font-size: 1rem;
   flex: 1 1 auto;
 }
 
 .main {
-  background-color: blue;
   display: flex;
   justify-content: center;
   flex: 0 1 auto;
@@ -34,8 +46,9 @@ body {
 .image-container {
   display: flex;
   justify-content: center;
-  height: calc(100% - 40px);
+  height: 100%;
   flex-grow: 0;
+  overflow-y: visible;
 }
 
 .image-holder {
@@ -43,10 +56,27 @@ body {
   display: flex;
   justify-content: center;
   background-color: white;
-  max-width: 700px;
+
+  min-width: 220px;
+  max-width: 50%;
+  width: 700px;
   max-height: 100%;
+
   flex: 1 1 auto;
   overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.image-viewer {
+  display: flex;
+  justify-content: center;
+
+  height: 100%;
+  width: 100%;
+
+  visibility: collapse;
+  overflow-y: auto;
+  background: linear-gradient(0%);
 }
 
 .image-page-controls {
@@ -74,30 +104,55 @@ body {
   margin: 3px;
   display: inline-flex;
 
-  
-  /* background-image: url('/../images/thumbnails/twitter.com -on-Twitter67b181eb8155400c4086e5c57cfa1673.png'); */
-  
+  /* background-image: url('/../images/thumbnails/twitter.com_-on-Twitter67b181eb8155400c4086e5c57cfa1673.png'); */
+}
+
+.background {
+
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 
-.footer {
-  background-color: brown;
-  flex: 1 1 auto;
+
+.orig-image-w {
+  width: max-content;
+  height: 100%;
 }
 
-.menu{
+.orig-image-h {
+  height: max-content;
+  width: 100%;
+  display: inline-flex
+}
+
+
+.footer {
+  background-color: brown;
+  flex: 0 1 auto;
+  font-family: Arial, Helvetica, sans-serif
+}
+
+.footer>p {
+  margin: 2px;
+  margin-left: 5px;
+}
+
+.menu {
   position: absolute;
   visibility: collapse;
   background-color: white;
   margin: 0px;
+
+  font-size: 1rem;
 }
-.show{
+
+.show {
   visibility: visible;
 }
-.menu > p{
+
+.menu>p {
   display: block;
   padding: 2px;
   padding-right: 0px;
@@ -114,7 +169,7 @@ body {
 }
 
 
-.selected{
+.selected {
   border: 2px dotted red;
   margin: 1px;
 }

@@ -12,6 +12,10 @@ const testFolder = './static/images/thumbnails';
 
 let image_array = []
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
 fs.readdir(testFolder, (err, files) => {
   files.forEach(file => {
     image_array.push(file);
@@ -20,6 +24,10 @@ fs.readdir(testFolder, (err, files) => {
 
 app.use(express.static(path.join(__dirname, 'static')));
 
+
+app.get('/about', function (req, res) {
+  res.sendFile(path.join(__dirname, 'static/html/about.html'))
+})
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'static/html/index.html'))
@@ -33,9 +41,15 @@ app.get("/thumbs", jsonParser, function (request, response) {
 
   const from = request.query.from
   const to = Math.min(request.query.to, image_array.length)
+  const send_img = []
 
-  console.log(from, to)
-  response.json(image_array.slice(from, to))
+  for (let i = 0; i < to - from; i++) {
+    const rnd = getRandomInt(image_array.length)
+
+    send_img.push(image_array[rnd])
+  }
+  response.json(send_img)
+
   // let filePath = path.join(__dirname, `static/tests/${request.body.from}.json`)
 
   // fs.readFile(filePath, {encoding: 'utf-8'}, (err, data) =>{

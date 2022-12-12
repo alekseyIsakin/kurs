@@ -3,24 +3,26 @@
 
 <head>
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/fast-average-color/dist/index.browser.min.js"></script>
 </head>
 
 <body class="row">
   <div class="head">
-    My image holder asdsad
+    <h1>My image holder</h1>
   </div>
 
   <div class="main col">
     <div class="image-container">
-      <div class="image-holder">
+      <div class="image-holder"style="resize:Horizontal;">
       </div>
-    </div>
-
-    <div class="image-page-controls">
+      <div class="image-viewer">
+        <img id="orig-image" class="orig-image-w">
+      </div>
     </div>
   </div>
   <div class="footer">
-    3
+    <p>powered by <a href="https://nodejs.org/en/">Node.js</a></p>
+    <p>об авторе <a href="/about">Node.js</a></p>
   </div>
   <div class="menu">
     <p id="open_image">Open</p>
