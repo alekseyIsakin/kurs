@@ -31,7 +31,7 @@ h1 {
 
 
 .head {
-  background-color: rgb(93, 61, 209);
+  background: linear-gradient(rgba(93, 61, 209) 32px, rgba(255, 255, 255, 0) 100%) ;
   font-size: 1rem;
   flex: 1 1 auto;
 }
@@ -130,6 +130,7 @@ h1 {
 
 .footer {
   background-color: brown;
+  background: linear-gradient(white 0%, brown 8px);
   flex: 0 1 auto;
   font-family: Arial, Helvetica, sans-serif
 }
