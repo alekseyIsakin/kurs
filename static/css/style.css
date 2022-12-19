@@ -9,7 +9,6 @@ body,
 html {
   height: 100%;
   margin: 0px;
-  font-family: 'Minotaur-Jugendstil';
 }
 
 body {
@@ -30,17 +29,22 @@ h1 {
 }
 
 
+
 .head {
-  background: linear-gradient(rgba(93, 61, 209) 32px, rgba(255, 255, 255, 0) 100%) ;
+  /* background: linear-gradient(rgba(93, 61, 209) 32px, rgba(255, 255, 255, 0) 100%) ; */
+  font-family: 'Minotaur-Jugendstil';
   font-size: 1rem;
   flex: 1 1 auto;
+  border: 0;
+  border-bottom: 2px solid black;
+
 }
 
 .main {
   display: flex;
   justify-content: center;
   flex: 0 1 auto;
-  height: calc(100% - 40px - 40px);
+  height: calc(100% - 40px - 44px);
 }
 
 .image-container {
@@ -74,7 +78,9 @@ h1 {
   height: 100%;
   width: 100%;
 
-  visibility: collapse;
+  /* visibility: collapse; */
+  width: 0px;
+
   overflow-y: auto;
   background: linear-gradient(0%);
 }
@@ -129,8 +135,8 @@ h1 {
 
 
 .footer {
-  background-color: brown;
-  background: linear-gradient(white 0%, brown 8px);
+  border: 0;
+  border-top: 2px solid black;
   flex: 0 1 auto;
   font-family: Arial, Helvetica, sans-serif
 }
@@ -151,6 +157,7 @@ h1 {
 
 .show {
   visibility: visible;
+  width: 100%;
 }
 
 .menu>p {
@@ -173,4 +180,17 @@ h1 {
 .selected {
   border: 2px dotted red;
   margin: 1px;
+}
+
+
+.animated-h {
+  transition-property: height;
+  transition-duration: 1s;
+  transition-timing-function: linear;
+}
+
+.animated-w {
+  transition-property: width;
+  transition-duration: 1s;
+  transition-timing-function: linear;
 }

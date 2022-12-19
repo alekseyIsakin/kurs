@@ -32,33 +32,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-document.querySelector('#open_image').addEventListener('click', (ev) => {
-  thumbnail = localStorage['selected_img']
-  document.querySelector('.menu').classList.remove('show')
+// document.querySelector('#open_image').addEventListener('click', (ev) => {
+//   thumbnail = localStorage['selected_img']
+//   document.querySelector('.menu').classList.remove('show')
 
-  let w = window.open(`/../images/${thumbnail}`)
+//   let w = window.open(`/../images/${thumbnail}`)
 
-  w.addEventListener('dblclick', (ev) => {
-    w.close()
-  })
-  w.addEventListener('keydown', (ev) => {
-    console.log(ev.key)
-    if (ev.key == 'Escape')
-      w.close()
-  })
+//   w.addEventListener('dblclick', (ev) => {
+//     w.close()
+//   })
+//   w.addEventListener('keydown', (ev) => {
+//     console.log(ev.key)
+//     if (ev.key == 'Escape')
+//       w.close()
+//   })
 
-})
+// })
 
-document.querySelector('#save_image').addEventListener('click', (ev) => {
-  thumbnail = localStorage['selected_img']
-  const link = document.createElement("a");
+// document.querySelector('#save_image').addEventListener('click', (ev) => {
+//   thumbnail = localStorage['selected_img']
+//   const link = document.createElement("a");
 
-  document.body.appendChild(link); // for Firefox
+//   document.body.appendChild(link); // for Firefox
 
-  link.setAttribute("href", `/../images/${thumbnail}`);
-  link.setAttribute("download", '');
-  link.click();
-})
+//   link.setAttribute("href", `/../images/${thumbnail}`);
+//   link.setAttribute("download", '');
+//   link.click();
+// })
 
 
 
@@ -93,7 +93,9 @@ const create_image_list = (thumb_array = []) => {
       const orig_image = document.querySelector('#orig-image')
       viewer.classList.add('show')
 
-      const cur = document.querySelector(`[value="${thumb_array[i]}"]`)
+      const cur = ev.target //document.querySelector(`[value="${thumb_array[i]}"]`)
+      const cur_ind = Array.from (image_holder.children).indexOf(cur)
+
       if (cur.classList.contains('selected')) {
         cur.classList.remove('selected')
         viewer.classList.remove('show')
@@ -107,9 +109,7 @@ const create_image_list = (thumb_array = []) => {
 
         fac.getColorAsync(`http://localhost:3000/images/${thumb_array[i]}`)
           .then(color => {
-            // container.style.backgroundColor = color.rgba;
             container.style.background = `linear-gradient(90deg, white 0%, ${color.rgba} 20%, ${color.rgba} 80%, white 100%)`
-            // container.style.color = color.isDark ? '#fff' : '#000';
           })
           .catch(e => {
             console.log(e);
@@ -117,17 +117,18 @@ const create_image_list = (thumb_array = []) => {
       }
 
       if (localStorage['selected_img']) {
-        const prev = document.querySelector(`[value="${localStorage['selected_img']}"]`)
-
+        const prev = image_holder.children[localStorage['selected_img']]
         if (prev) {
           prev.classList.remove('selected')
         }
       }
 
-      if (localStorage['selected_img'] == thumb_array[i])
+      if (localStorage['selected_img'] == String(cur_ind)){
         localStorage['selected_img'] = ''
+        orig_image.classList.remove('orig-image-h')
+      }
       else
-        localStorage['selected_img'] = thumb_array[i]
+        localStorage['selected_img'] = cur_ind
 
     })
     image_holder.appendChild(div)
