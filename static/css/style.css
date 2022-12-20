@@ -105,11 +105,15 @@ h1 {
 }
 
 .image {
+  height: 200px;
+  width: 200px;
+
   min-height: 200px;
   min-width: 200px;
   margin: 3px;
   display: inline-flex;
 
+  object-fit: contain;
   /* background-image: url('/../images/thumbnails/twitter.com_-on-Twitter67b181eb8155400c4086e5c57cfa1673.png'); */
 }
 
@@ -118,6 +122,8 @@ h1 {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+
+
 }
 
 
@@ -195,19 +201,35 @@ h1 {
   transition-timing-function: linear;
 }
 
+.svg-holder {
+  transition-property: right;
+  transition-duration: .5s;
+  transition-timing-function: linear;
+
+  position: fixed;
+  right: -60px;
+  bottom: 50px;
+  border: 1px solid black;
+  background-color: rgba(255, 255, 255, .7);
+}
+
+.svg-bookmarks,
 .svg-star,
 .svg-download {
-  position: fixed;
-  right:10px;
-  border: 1px solid black;
+  height: 40px;
+  width: 40px;
+  display: block;
+  padding: 2px;
+}
+
+.svg-bookmarks {
+  bottom: 80px;
 }
 
 .svg-star {
-  bottom: 90px;
-  height: 40px;
+  bottom: 40px;
 }
 
 .svg-download {
-  bottom: 50px;
-  height: 40px;
+  bottom: 0px;
 }
