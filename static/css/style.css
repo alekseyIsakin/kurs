@@ -194,3 +194,20 @@ h1 {
   transition-duration: 1s;
   transition-timing-function: linear;
 }
+
+.svg-star,
+.svg-download {
+  position: fixed;
+  right:10px;
+  border: 1px solid black;
+}
+
+.svg-star {
+  bottom: 90px;
+  height: 40px;
+}
+
+.svg-download {
+  bottom: 50px;
+  height: 40px;
+}

@@ -33,7 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // document.querySelector('#open_image').addEventListener('click', (ev) => {
-//   thumbnail = localStorage['selected_img']
+//   const img_holder = document.querySelector('.image-holder')
+//   thumbnail = img_holder.children[localStorage['selected_img']].value
 //   document.querySelector('.menu').classList.remove('show')
 
 //   let w = window.open(`/../images/${thumbnail}`)
@@ -46,19 +47,23 @@ document.addEventListener('DOMContentLoaded', () => {
 //     if (ev.key == 'Escape')
 //       w.close()
 //   })
-
 // })
 
-// document.querySelector('#save_image').addEventListener('click', (ev) => {
-//   thumbnail = localStorage['selected_img']
-//   const link = document.createElement("a");
+document.querySelector('.svg-download').addEventListener('click', (ev) => {
+  const img_holder = document.querySelector('.image-holder')
+  thumbnail = img_holder.children[localStorage['selected_img']].value
 
-//   document.body.appendChild(link); // for Firefox
+  let w = window.open(`/../images/${thumbnail}`)
 
-//   link.setAttribute("href", `/../images/${thumbnail}`);
-//   link.setAttribute("download", '');
-//   link.click();
-// })
+  w.addEventListener('dblclick', (ev) => {
+    w.close()
+  })
+  w.addEventListener('keydown', (ev) => {
+    console.log(ev.key)
+    if (ev.key == 'Escape')
+      w.close()
+  })
+})
 
 
 
@@ -83,7 +88,9 @@ const create_image_list = (thumb_array = []) => {
     const div = document.createElement('div')
     div.classList.add('image')
     div.classList.add('background')
+
     div.style = `background-image: url('/../images/thumbnails/${thumb_array[i]}')`
+    div.value = thumb_array[i]
     div.setAttribute('value', thumb_array[i])
 
 
@@ -94,7 +101,7 @@ const create_image_list = (thumb_array = []) => {
       viewer.classList.add('show')
 
       const cur = ev.target //document.querySelector(`[value="${thumb_array[i]}"]`)
-      const cur_ind = Array.from (image_holder.children).indexOf(cur)
+      const cur_ind = Array.from(image_holder.children).indexOf(cur)
 
       if (cur.classList.contains('selected')) {
         cur.classList.remove('selected')
@@ -107,9 +114,14 @@ const create_image_list = (thumb_array = []) => {
         const fac = new FastAverageColor();
         const container = document.querySelector('.image-viewer');
 
-        fac.getColorAsync(`http://localhost:3000/images/${thumb_array[i]}`)
+        const icon = document.querySelectorAll('.control-icon');
+
+        fac.getColorAsync(`${window.location.href}/images/${thumb_array[i]}`)
           .then(color => {
+            const c = `rgba(${color.value[0]}, ${color.value[1]}, ${color.value[2]}, .7)`
+
             container.style.background = `linear-gradient(90deg, white 0%, ${color.rgba} 20%, ${color.rgba} 80%, white 100%)`
+            icon.forEach(i => i.style.backgroundColor = c)
           })
           .catch(e => {
             console.log(e);
@@ -123,7 +135,7 @@ const create_image_list = (thumb_array = []) => {
         }
       }
 
-      if (localStorage['selected_img'] == String(cur_ind)){
+      if (localStorage['selected_img'] == String(cur_ind)) {
         localStorage['selected_img'] = ''
         orig_image.classList.remove('orig-image-h')
       }
