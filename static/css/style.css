@@ -205,10 +205,13 @@ h1 {
   transition-property: right;
   transition-duration: .5s;
   transition-timing-function: linear;
+}
 
+.svg-bookmarks,
+.svg-holder{
   position: fixed;
   right: -60px;
-  bottom: 50px;
+  bottom: 90px;
   border: 1px solid black;
   background-color: rgba(255, 255, 255, .7);
 }
@@ -223,7 +226,9 @@ h1 {
 }
 
 .svg-bookmarks {
-  bottom: 80px;
+  bottom: 45px;
+  position: fixed;
+  right: 10px;
 }
 
 .svg-star {

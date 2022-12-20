@@ -1,4 +1,5 @@
 let cur_page = 0
+let show_bookmarks = false
 
 if (localStorage['saved_images'] == '')
   localStorage['saved_images'] = []
@@ -8,6 +9,8 @@ localStorage['selected_img'] = ''
 localStorage.clear()
 
 const change_page = (change = +16) => {
+  if (show_bookmarks) throw 'bookmarks loader'
+
   const pair = new URLSearchParams();
   pair.append("from", 0);
   cur_page = Math.max(16, cur_page + change)
@@ -33,23 +36,37 @@ const clear_images = () => {
 }
 
 
+const first_load_image = () => {
+  const img_holder_bound = document.querySelector('.image-holder').getBoundingClientRect()
+  let cnt = Math.floor(img_holder_bound.width / 200)
+  cnt *= Math.ceil(img_holder_bound.height / 200)
+  console.log('>>', cnt)
+  change_page(cnt)
+}
+
+
 window.addEventListener("unload", function () {
+  saved_images.delete('')
   localStorage['saved_images'] = Array.from(saved_images).join(',')
 });
 
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  const img_holder_bound = document.querySelector('.image-holder').getBoundingClientRect()
-  let cnt = Math.floor(img_holder_bound.width / 200)
-  cnt *= Math.ceil(img_holder_bound.height / 200)
-  console.log('>>', cnt)
-  change_page(cnt)
+  first_load_image()
 })
 
 
 document.querySelector('.svg-bookmarks').addEventListener('click', (ev) => {
-  throw 'not realized'
+  clear_images()
+
+  if (show_bookmarks == false){
+    show_bookmarks = true
+    create_image_list(Array.from( saved_images))
+  }else{
+    show_bookmarks = false
+    first_load_image()
+  }
 })
 
 
@@ -86,6 +103,8 @@ document.querySelector('.svg-download').addEventListener('click', (ev) => {
 
 
 document.querySelector('.image-holder').addEventListener('scroll', () => {
+  
+
   const img_holder = document.querySelector('.image-holder')
   // нижняя граница документа
   const scrollPos = img_holder.getBoundingClientRect().bottom
@@ -100,13 +119,16 @@ document.querySelector('.image-holder').addEventListener('scroll', () => {
 
 const create_image_list = (thumb_array = []) => {
   const image_holder = document.querySelector('.image-holder')
+  console.log(thumb_array)
+  
   for (let i = 0; i < thumb_array.length; i++) {
+    console.log(i)
 
     const img = document.createElement('img')
     img.classList.add('image')
     img.classList.add('background')
 
-    img.style.content = `url('/../images/thumbnails/${thumb_array[i]}'`
+    img.src = `images/thumbnails/${thumb_array[i]}`
     img.value = thumb_array[i]
     img.setAttribute('value', thumb_array[i])
     img.alt = 'can`t download ' + thumb_array[i]
@@ -128,9 +150,9 @@ const create_image_list = (thumb_array = []) => {
       } else {
         cur.classList.add('selected')
         viewer.classList.add('show')
-        orig_image.style.content = `url('/../images/${thumb_array[i]}')`
+        orig_image.src = `images/${thumb_array[i]}`
 
-        icon.style.right = '50px'
+        icon.style.right = '10px'
         if (saved_images.has(thumb_array[i])) {
           document.querySelector('.svg-star').src = 'svg/bookmarked.svg'
         } else {
