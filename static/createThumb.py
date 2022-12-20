@@ -1,5 +1,5 @@
 from PIL import Image
-from os import listdir, rename,getcwd
+from os import listdir, rename, getcwd
 from os.path import isfile, join
 
 PATH = join(getcwd(), "images")
@@ -10,6 +10,8 @@ onlyfiles = [f for f in listdir(PATH) if isfile(join(PATH, f))]
 for i in onlyfiles:
   name = i
   name = name.replace(' ', '_')
+  suf = name.split()
+  name = name.replace('.', '_')
   rename(join(PATH, i), join(PATH, name))
 
   image = Image.open(join(PATH, name))
