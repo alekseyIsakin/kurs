@@ -8,7 +8,7 @@ const jsonParser = express.json();
 
 
 const port = 3000;
-const testFolder = './static/images/thumbnails';
+const thumbnails = './static/images/thumbnails';
 
 let image_array = []
 
@@ -16,7 +16,7 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-fs.readdir(testFolder, (err, files) => {
+fs.readdir(thumbnails, (err, files) => {
   files.forEach(file => {
     image_array.push(file);
   });
@@ -36,7 +36,6 @@ app.get('/', function (req, res) {
 
 
 app.get("/thumbs", jsonParser, function (request, response) {
-  console.log(request.body);
   if (!request.body) return response.sendStatus(400);
 
   const from = request.query.from
@@ -49,15 +48,6 @@ app.get("/thumbs", jsonParser, function (request, response) {
     send_img.push(image_array[rnd])
   }
   response.json(send_img)
-
-  // let filePath = path.join(__dirname, `static/tests/${request.body.from}.json`)
-
-  // fs.readFile(filePath, {encoding: 'utf-8'}, (err, data) =>{
-  //   if (!err)
-  //     response.sendFile(JSON.parse(data));
-  //   else
-  //     console.log(err)
-  // })
 });
 
 

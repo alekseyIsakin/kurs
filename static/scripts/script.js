@@ -1,15 +1,15 @@
 let cur_page = 0
 let show_bookmarks = false
 
-if (localStorage['saved_images'] == '')
+if (localStorage['saved_images'] == undefined)
   localStorage['saved_images'] = []
 const saved_images = new Set(localStorage['saved_images'].split(','))
+saved_images.delete('')
 
 localStorage['selected_img'] = ''
 localStorage.clear()
 
 const change_page = (change = +16) => {
-  if (show_bookmarks) throw 'bookmarks loader'
 
   const pair = new URLSearchParams();
   pair.append("from", 0);
@@ -38,8 +38,8 @@ const clear_images = () => {
 
 const first_load_image = () => {
   const img_holder_bound = document.querySelector('.image-holder').getBoundingClientRect()
-  let cnt = Math.floor(img_holder_bound.width / 200)
-  cnt *= Math.ceil(img_holder_bound.height / 200)
+  let cnt = Math.floor(img_holder_bound.width / 100)
+  cnt *= Math.ceil(img_holder_bound.height / 100)
   console.log('>>', cnt)
   change_page(cnt)
 }
@@ -57,18 +57,37 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 
-document.querySelector('.svg-bookmarks').addEventListener('click', (ev) => {
-  clear_images()
 
-  if (show_bookmarks == false){
-    show_bookmarks = true
-    create_image_list(Array.from( saved_images))
-  }else{
-    show_bookmarks = false
-    first_load_image()
+// ************************************
+// ************************************
+// ************************************
+
+document.querySelector('.svg-close').addEventListener('click', (ev) => {
+  const image_holder = document.querySelector('.image-holder')
+  const viewer = document.querySelector('.image-viewer')
+  const icon = document.querySelector('.svg-holder');
+  const orig_image = document.querySelector('#orig-image')
+
+  if (localStorage['selected_img']) {
+    const cur = image_holder.children[localStorage['selected_img']]
+
+    cur.classList.remove('selected')
+    viewer.classList.remove('show')
+    orig_image.classList.remove('orig-image-h')
+    icon.style.right = ''
   }
 })
 
+document.querySelector('.svg-bookmarks').addEventListener('click', (ev) => {
+  clear_images()
+
+  if (show_bookmarks == false) {
+    create_image_list(Array.from(saved_images))
+  } else {
+    first_load_image()
+  }
+  show_bookmarks = !show_bookmarks
+})
 
 document.querySelector('.svg-star').addEventListener('click', (ev) => {
   const img_holder = document.querySelector('.image-holder')
@@ -102,13 +121,17 @@ document.querySelector('.svg-download').addEventListener('click', (ev) => {
 
 
 
+// ************************************
+// ************************************
+// ************************************
+
 document.querySelector('.image-holder').addEventListener('scroll', () => {
-  
+  if (show_bookmarks) return
 
   const img_holder = document.querySelector('.image-holder')
   // нижняя граница документа
   const scrollPos = img_holder.getBoundingClientRect().bottom
-  const scrollHeight =  img_holder.lastChild ? img_holder.lastChild.getBoundingClientRect().bottom : 0
+  const scrollHeight = img_holder.lastChild ? img_holder.lastChild.getBoundingClientRect().bottom : 0
 
   // если пользователь прокрутил достаточно далеко (< 100px до конца)
   if (scrollHeight < scrollPos + 100) {
@@ -119,10 +142,8 @@ document.querySelector('.image-holder').addEventListener('scroll', () => {
 
 const create_image_list = (thumb_array = []) => {
   const image_holder = document.querySelector('.image-holder')
-  console.log(thumb_array)
-  
+
   for (let i = 0; i < thumb_array.length; i++) {
-    console.log(i)
 
     const img = document.createElement('img')
     img.classList.add('image')
@@ -152,7 +173,7 @@ const create_image_list = (thumb_array = []) => {
         viewer.classList.add('show')
         orig_image.src = `images/${thumb_array[i]}`
 
-        icon.style.right = '10px'
+        icon.style.right = '20px'
         if (saved_images.has(thumb_array[i])) {
           document.querySelector('.svg-star').src = 'svg/bookmarked.svg'
         } else {

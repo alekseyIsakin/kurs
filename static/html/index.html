@@ -6,18 +6,18 @@
   <script src="https://unpkg.com/fast-average-color/dist/index.browser.min.js"></script>
 </head>
 
-<body class="row">
+<body class="col">
   <div class="head">
     <h1>My image holder</h1>
   </div>
 
   <div class="main col">
     <div class="image-container">
-      <div class="image-holder" style="resize:Horizontal;">
-      </div>
+      <div class="image-holder" ></div>
       <div class="image-viewer animated-w">
         <img id="orig-image" class="orig-image-w">
         <div class="svg-holder" style="position: absolute;">
+          <img src="svg/close.svg" class="svg-close control-icon" title="Close view">
           <img src="svg/bookmark.svg" class="svg-star control-icon" title="Bookmark">
           <img src="svg/download.svg" class="svg-download control-icon" title="Download">
         </div>
